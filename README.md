@@ -1,3 +1,60 @@
+# Farmora
+
+A local-first agro marketplace built with Next.js. It connects buyers with farmers, supports seller listings, a full cart and checkout flow, and a dedicated user dashboard with orders, tracking, rewards, connect, and profile management.
+
+## Features
+- Marketplace: Browse default catalog merged with farmer-listed products from localStorage.
+- Seller Hub: Farmers add/remove products; listings persist to localStorage and appear in the marketplace.
+- Cart & Checkout: Add items, update quantities, remove items, and place orders. Orders are stored with a status lifecycle.
+- User Dashboard: Overview of orders, rewards, community connect, and quick links.
+- Profile Page: Edit and save name, email, phone, address.
+- Tracking Page: View your orders and advance status (processing → shipped → out_for_delivery → delivered).
+
+## Tech Stack
+- Next.js (App Router), React, TypeScript
+- Tailwind CSS
+- lucide-react icons
+- LocalStorage for demo persistence
+
+## Getting Started
+1. Prerequisites: Node.js 18+
+2. Install: npm install
+3. Run dev: npm run dev
+4. Open: http://localhost:3000/
+
+## Key Pages
+- /marketplace: Shop, search, filter; shows farmer products + default catalog.
+- /seller: List and manage products (farmer role required).
+- /checkout: Review cart, buyer details, place order.
+- /user: Dashboard overview.
+- /user/profile: Manage personal info.
+- /user/tracking: Track orders and update status.
+- /sign-up and /sign-in: Local demo auth with role selection (user/farmer).
+
+## LocalStorage Keys
+- farmora_user: { name, email, role, phone?, address? }
+- farmora_products: Farmer-listed products
+- farmora_cart: Cart items
+- farmora_orders: Orders with status and timestamps
+- farmora_favorites: Optional favorites on homepage
+
+## Cart Hook API
+Located at src/hooks/useCart.ts
+- items, count, total
+- addItem, removeItem, updateQty, clearCart
+- CartItem: { id, name, price, unit, qty, img, farmer }
+
+## Typical Flows
+- Seller → add product in /seller → appears in /marketplace.
+- Buyer → add to cart → /checkout → place order → track in /user/tracking.
+- User → manage profile in /user/profile.
+
+## Notes
+- Demo-only: data stored in localStorage. No backend or real auth.
+- Role guards redirect to /sign-in when needed; redirect-related browser logs are expected if not signed in.
+- Currency: INR (₹) across marketplace and checkout.
+
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started

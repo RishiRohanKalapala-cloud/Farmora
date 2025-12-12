@@ -1,164 +1,183 @@
 "use client";
 
 import React, { useState } from "react";
-import { ArrowLeft, Mail, Lock, Check, Quote } from "lucide-react";
+import { ArrowLeft, ArrowRight, Sprout, Wheat } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 export default function SignInPage() {
   const router = useRouter();
   const [role, setRole] = useState<"user" | "farmer">("user");
+  const [formData, setFormData] = useState({ email: "", password: "" });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formData.email || !formData.password) return;
+    localStorage.setItem("farmora_user", JSON.stringify({ ...formData, role }));
+    router.push("/marketplace");
+  };
+
   return (
-    <div className="min-h-screen w-full flex bg-white text-stone-900 font-sans">
+    <div className="min-h-screen w-full flex bg-white font-sans selection:bg-[#D2F34C] selection:text-stone-900">
       
-      {/* LEFT SIDE: Visual/Brand Area 
-          Hidden on mobile, distinct on desktop. 
-      */}
-      <div className="hidden lg:flex lg:w-1/2 relative bg-stone-50 flex-col items-center justify-center overflow-hidden border-r border-stone-100 p-12">
-        {/* Abstract Background Shapes (Brand Color #D2F34C) */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#D2F34C]/20 rounded-full blur-[120px]" />
+      {/* LEFT SIDE: Static Visuals */}
+      <div className="hidden lg:flex lg:w-5/12 relative bg-stone-900 flex-col justify-between p-12 overflow-hidden text-white">
         
-        {/* Content overlaid on background */}
-        <div className="relative z-10 max-w-lg w-full space-y-10">
-          
-          {/* Main Headline & Description */}
-          <div className="space-y-4">
-            <h2 className="text-4xl font-bold tracking-tight text-stone-900">
-              Cultivating the future.
-            </h2>
-            <p className="text-lg text-stone-600 leading-relaxed max-w-md">
-              Join Farmora to streamline your agricultural management with precision. 
-              Monitor crops, manage resources, and grow efficiently.
+        {/* STATIC GLOW: No animation, just a fixed beautiful light leak */}
+        <div className="absolute top-[-10%] right-[-10%] w-[600px] h-[600px] bg-[#D2F34C] rounded-full blur-[180px] opacity-15 pointer-events-none"></div>
+        <div className="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] bg-[#D2F34C] rounded-full blur-[200px] opacity-5 pointer-events-none"></div>
+
+        {/* Brand Logo */}
+        <div className="relative z-10 flex items-center gap-2">
+          <div className="h-8 w-8 bg-[#D2F34C] rounded-lg flex items-center justify-center text-stone-900 shadow-[0_0_15px_rgba(210,243,76,0.3)]">
+            <Sprout size={20} strokeWidth={2.5} />
+          </div>
+          <span className="text-xl font-bold tracking-tight text-white">Farmora</span>
+        </div>
+
+        {/* Content */}
+        <div className="relative z-10 space-y-8">
+          <h2 className="text-5xl font-light tracking-tight leading-tight">
+            Cultivate <br />
+            <span className="font-serif italic text-[#D2F34C]">Precision.</span>
+          </h2>
+
+          <div className="relative pl-6 border-l-2 border-[#D2F34C]/50">
+            <p className="text-2xl font-medium text-stone-200 leading-relaxed">
+              "నేల తల్లిని నమ్ముకున్న వాడు ఎప్పుడూ చెడిపోడు."
+            </p>
+            <p className="mt-3 text-xs font-bold text-[#D2F34C] uppercase tracking-[0.2em] opacity-80">
+              Farmer's Proverb
             </p>
           </div>
-
-          {/* Telugu Quote Card */}
-          <div className="relative group">
-            <div className="absolute -inset-1 bg-gradient-to-r from-[#D2F34C] to-[#cbf035] rounded-2xl blur opacity-25 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
-            <div className="relative bg-white/60 backdrop-blur-md rounded-2xl p-8 border border-stone-200 shadow-sm">
-              <Quote className="h-8 w-8 text-stone-400 mb-4 opacity-50" />
-              <blockquote className="text-2xl font-bold text-stone-900 leading-snug">
-                "నేల తల్లిని నమ్ముకున్న వాడు ఎప్పుడూ చెడిపోడు."
-              </blockquote>
-              <div className="mt-4 flex items-center gap-2">
-                <div className="h-1 w-8 bg-[#D2F34C] rounded-full"></div>
-                <p className="text-sm font-semibold text-stone-500">
-                  రైతు సామెత (Farmer's Proverb)
-                </p>
-              </div>
-            </div>
-          </div>
-
         </div>
-        
-        {/* Grainy Texture Overlay */}
-        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 brightness-100 contrast-150 mix-blend-multiply pointer-events-none"></div>
+
+        {/* Footer */}
+        <div className="relative z-10 text-stone-500 text-xs flex justify-between">
+          <p>© 2024 Farmora Inc.</p>
+        </div>
       </div>
 
-      {/* RIGHT SIDE: Form Area */}
-      <div className="w-full lg:w-1/2 flex flex-col items-center justify-center p-8 lg:p-24 relative">
+      {/* RIGHT SIDE: Minimal Form */}
+      <div className="w-full lg:w-7/12 flex flex-col relative bg-white">
         
-        {/* "Back to Home" Button - Black Filled */}
-        <a href="/" className="absolute top-8 left-8 flex items-center gap-2 rounded-full bg-stone-900 px-5 py-2.5 text-sm font-medium text-white hover:bg-stone-800 hover:shadow-lg transition-all active:scale-95">
-          <ArrowLeft className="w-4 h-4" />
-          Back to Home
-        </a>
+        {/* Back Button */}
+        <div className="absolute top-8 left-8 z-20">
+          <a href="/" className="flex items-center gap-2 text-sm font-medium text-stone-400 hover:text-stone-900 transition-colors">
+            <ArrowLeft className="w-4 h-4" />
+            <span className="hidden sm:inline">Back</span>
+          </a>
+        </div>
 
-        <div className="w-full max-w-sm space-y-8 mt-12 lg:mt-0">
-          <div className="text-left">
-            <h1 className="text-3xl font-bold tracking-tight text-stone-900">Welcome back</h1>
-            <p className="mt-2 text-stone-500">
-              Please enter your details to sign in.
-            </p>
-          </div>
+        <div className="flex-1 flex flex-col justify-center items-center px-8 sm:px-12 lg:px-24">
+          <div className="w-full max-w-md space-y-12">
+            
+            {/* Header */}
+            <div className="space-y-2">
+              <h1 className="text-3xl font-bold text-stone-900">Sign In</h1>
+              <p className="text-stone-500">Access your dashboard.</p>
+            </div>
 
-          <form className="space-y-6" onSubmit={(e) => {
-            e.preventDefault();
-            const form = e.target as HTMLFormElement;
-            const email = (form.elements.namedItem("email") as HTMLInputElement)?.value || "";
-            const password = (form.elements.namedItem("password") as HTMLInputElement)?.value || "";
-            if (!email || !password) return;
-            localStorage.setItem("farmora_user", JSON.stringify({ email, role }));
-            router.push("/marketplace");
-          }}>
-            <div className="space-y-4">
-              {/* Role Selection */}
-              <div className="flex items-center gap-3">
-                <label className="text-sm font-semibold text-stone-700">Role</label>
-                <label className="inline-flex items-center gap-2 text-sm">
-                  <input type="radio" name="role" value="user" checked={role === "user"} onChange={() => setRole("user")} /> User
-                </label>
-                <label className="inline-flex items-center gap-2 text-sm">
-                  <input type="radio" name="role" value="farmer" checked={role === "farmer"} onChange={() => setRole("farmer")} /> Farmer
-                </label>
-              </div>
+            {/* Role Switcher */}
+            <div className="flex p-1 bg-stone-50 border border-stone-100 rounded-lg w-full">
+              <button
+                onClick={() => setRole("user")}
+                className={`flex-1 py-2 text-sm font-semibold rounded-md transition-all ${
+                  role === "user" ? "bg-white text-stone-900 shadow-sm border border-stone-100" : "text-stone-400 hover:text-stone-600"
+                }`}
+              >
+                Consumer
+              </button>
+              <button
+                onClick={() => setRole("farmer")}
+                className={`flex-1 flex items-center justify-center gap-2 py-2 text-sm font-semibold rounded-md transition-all ${
+                  role === "farmer" ? "bg-white text-stone-900 shadow-sm border border-stone-100" : "text-stone-400 hover:text-stone-600"
+                }`}
+              >
+                <Wheat size={14} />
+                Farmer
+              </button>
+            </div>
 
-              {/* Email Input */}
-              <div className="space-y-1.5">
-                <label className="block text-sm font-semibold text-stone-700">Email</label>
+            <form onSubmit={handleSubmit} className="space-y-10">
+              <div className="space-y-8">
+                
+                {/* Email Input: Just a line */}
                 <div className="relative group">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-stone-400 group-focus-within:text-stone-800 transition-colors">
-                    <Mail className="h-5 w-5" />
-                  </div>
-                  <input 
+                  <input
+                    type="email"
                     name="email"
-                    type="email" 
-                    className="block w-full rounded-xl border border-stone-200 bg-stone-50 pl-10 pr-4 py-3 text-stone-900 placeholder-stone-400 transition-all duration-200 focus:bg-white focus:border-[#D2F34C] focus:ring-4 focus:ring-[#D2F34C]/20 focus:outline-none sm:text-sm" 
-                    placeholder="you@example.com" 
+                    id="email"
+                    required
+                    value={formData.email}
+                    onChange={handleChange}
+                    className="peer block w-full border-b border-stone-200 bg-transparent py-2.5 text-stone-900 placeholder-transparent focus:border-stone-900 focus:outline-none transition-colors"
+                    placeholder="Email Address"
                   />
+                  <label
+                    htmlFor="email"
+                    className="absolute left-0 -top-3.5 text-xs font-medium text-stone-400 transition-all 
+                               peer-placeholder-shown:top-2.5 peer-placeholder-shown:text-base peer-placeholder-shown:text-stone-400 
+                               peer-focus:-top-3.5 peer-focus:text-xs peer-focus:text-stone-900"
+                  >
+                    Email Address
+                  </label>
                 </div>
-              </div>
 
-              {/* Password Input */}
-              <div className="space-y-1.5">
-                <label className="block text-sm font-semibold text-stone-700">Password</label>
+                {/* Password Input: Just a line */}
                 <div className="relative group">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-stone-400 group-focus-within:text-stone-800 transition-colors">
-                    <Lock className="h-5 w-5" />
-                  </div>
-                  <input 
+                  <input
+                    type="password"
                     name="password"
-                    type="password" 
-                    className="block w-full rounded-xl border border-stone-200 bg-stone-50 pl-10 pr-4 py-3 text-stone-900 placeholder-stone-400 transition-all duration-200 focus:bg-white focus:border-[#D2F34C] focus:ring-4 focus:ring-[#D2F34C]/20 focus:outline-none sm:text-sm" 
-                    placeholder="••••••••" 
+                    id="password"
+                    required
+                    value={formData.password}
+                    onChange={handleChange}
+                    className="peer block w-full border-b border-stone-200 bg-transparent py-2.5 text-stone-900 placeholder-transparent focus:border-stone-900 focus:outline-none transition-colors"
+                    placeholder="Password"
                   />
+                  <label
+                    htmlFor="password"
+                    className="absolute left-0 -top-3.5 text-xs font-medium text-stone-400 transition-all 
+                               peer-placeholder-shown:top-2.5 peer-placeholder-shown:text-base peer-placeholder-shown:text-stone-400 
+                               peer-focus:-top-3.5 peer-focus:text-xs peer-focus:text-stone-900"
+                  >
+                    Password
+                  </label>
                 </div>
               </div>
+
+              <div className="flex items-center justify-between">
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" className="w-4 h-4 rounded border-stone-300 text-stone-900 focus:ring-stone-900" />
+                  <span className="text-sm text-stone-500">Remember me</span>
+                </label>
+                <a href="#" className="text-sm font-medium text-stone-400 hover:text-stone-900 transition-colors">
+                  Forgot Password?
+                </a>
+              </div>
+
+              <button
+                type="submit"
+                className="flex w-full items-center justify-center gap-2 rounded-lg bg-stone-900 px-8 py-4 text-white hover:bg-stone-800 hover:shadow-lg transition-all active:scale-[0.99]"
+              >
+                <span className="font-bold text-sm">Sign In</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </form>
+
+            <div className="text-center">
+              <p className="text-stone-400 text-sm">
+                New here?{" "}
+                <a href="/sign-up" className="font-bold text-stone-900 hover:underline hover:text-[#D2F34C] transition-colors decoration-2 underline-offset-4">
+                  Create account
+                </a>
+              </p>
             </div>
 
-            <div className="flex items-center justify-between">
-              <label className="flex items-center gap-3 cursor-pointer group">
-                <div className="relative flex items-center">
-                  <input type="checkbox" className="peer h-4 w-4 cursor-pointer appearance-none rounded border border-stone-300 shadow-sm transition-all checked:border-[#D2F34C] checked:bg-[#D2F34C] hover:border-[#D2F34C]" />
-                  <Check className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 text-stone-900 opacity-0 peer-checked:opacity-100 pointer-events-none" strokeWidth={3} />
-                </div>
-                <span className="text-sm font-medium text-stone-600 group-hover:text-stone-900 transition-colors">Remember me</span>
-              </label>
-              <a href="#" className="text-sm font-semibold text-stone-600 hover:text-stone-900 underline decoration-stone-300 underline-offset-4 hover:decoration-stone-900 transition-all">
-                Forgot password?
-              </a>
-            </div>
-
-            <button 
-              type="submit" 
-              className="w-full rounded-xl bg-[#D2F34C] px-6 py-3.5 text-sm font-bold text-stone-900 shadow-lg shadow-[#D2F34C]/20 hover:bg-[#cbf035] hover:shadow-[#D2F34C]/40 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
-            >
-              Sign In
-            </button>
-          </form>
-
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-stone-200"></div>
-            </div>
-            <div className="relative flex justify-center">
-              <span className="bg-white px-2 text-sm text-stone-400">New to Farmora?</span>
-            </div>
-          </div>
-
-          <div className="text-center">
-            <a href="/sign-up" className="inline-flex items-center justify-center w-full rounded-xl border border-stone-200 bg-white px-6 py-3.5 text-sm font-bold text-stone-700 hover:bg-stone-50 hover:border-stone-300 transition-all">
-              Create an account
-            </a>
           </div>
         </div>
       </div>
